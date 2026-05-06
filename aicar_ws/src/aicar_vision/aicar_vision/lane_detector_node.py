@@ -74,10 +74,6 @@ class LaneDetectorNode(Node):
         
         self.publisher_processed = self.create_publisher(Image, '/image_processed', 10)
 
-    def destroy_node(self):
-        cv2.destroyAllWindows()
-        return super().destroy_node()
-
     def undistort_image(self, img):
         return cv2.undistort(img, self.mtx, self.dist, None, self.mtx)
 
@@ -132,19 +128,6 @@ class LaneDetectorNode(Node):
         proc_msg = self.bridge.cv2_to_imgmsg(undistorted, "bgr8")
         proc_msg.header = msg.header
         self.publisher_processed.publish(proc_msg)
-
-        # (D) 화면 디버깅용 BEV 시각화
-        bev_lane_bgr = cv2.cvtColor(bev_lane, cv2.COLOR_GRAY2BGR)
-        bev_red_bgr = cv2.cvtColor(bev_red, cv2.COLOR_GRAY2BGR)
-        debug_bev = np.hstack((bev_lane_bgr, bev_red_bgr))
-
-        cv2.putText(debug_bev, 'Lane BEV', (20, 35), cv2.FONT_HERSHEY_SIMPLEX,
-                    1.0, (0, 255, 255), 2, cv2.LINE_AA)
-        cv2.putText(debug_bev, 'Red BEV', (self.img_width + 20, 35), cv2.FONT_HERSHEY_SIMPLEX,
-                    1.0, (0, 0, 255), 2, cv2.LINE_AA)
-
-        cv2.imshow('Lane Detector BEV Debug', debug_bev)
-        cv2.waitKey(1)
 
 def main(args=None):
     rclpy.init(args=args)

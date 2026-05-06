@@ -24,6 +24,13 @@ def generate_launch_description():
         name='lane_detector_node'
     )
 
+    bev_view_node = Node(
+        package='image_view',
+        executable='image_view',
+        name='bev_view',
+        arguments=['--ros-args', '--remap', 'image:=/image_bev_binary']
+    )
+
     controller_node = Node(
         package='aicar_controller',
         executable='pure_pursuit_node',
@@ -40,6 +47,7 @@ def generate_launch_description():
     return LaunchDescription([
         camera_node_launch,
         lane_detector_node,
+        bev_view_node,
         controller_node,
         motor_driver_node,
     ])
