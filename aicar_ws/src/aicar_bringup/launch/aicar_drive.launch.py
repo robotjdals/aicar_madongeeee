@@ -45,6 +45,25 @@ def generate_launch_description():
         output='screen'
     )
 
+    bev_color_view_node = ComposableNodeContainer(
+        name='bev_color_view_container',
+        namespace='',
+        package='rclcpp_components',
+        executable='component_container',
+        composable_node_descriptions=[
+            ComposableNode(
+                package='image_view',
+                plugin='image_view::ImageViewNode',
+                name='bev_color_image_view_node',
+                remappings=[
+                    ('image', '/image_bev_color'),
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+        ],
+        output='screen'
+    )
+
     controller_node = Node(
         package='aicar_controller',
         executable='pure_pursuit_node',
@@ -62,6 +81,7 @@ def generate_launch_description():
         camera_node_launch,
         lane_detector_node,
         bev_view_node,
+        bev_color_view_node,
         controller_node,
         motor_driver_node,
     ])

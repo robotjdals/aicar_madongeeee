@@ -72,6 +72,8 @@ class LaneDetectorNode(Node):
         
         # 토픽 1: 주행용 차선 (노란색) -> PID 제어에 사용
         self.publisher_bev_lane = self.create_publisher(Image, '/image_bev_binary', 10)
+        # 토픽 1-1: 디버깅용 컬러 BEV
+        self.publisher_bev_color = self.create_publisher(Image, '/image_bev_color', 10)
         # 토픽 2: 종료 확인용 라인 (빨간색) -> 종료 로직에만 사용
         self.publisher_bev_red = self.create_publisher(Image, '/image_red_bev', 10)
         
@@ -105,6 +107,7 @@ class LaneDetectorNode(Node):
 
         # 1. 전처리 (왜곡 보정 + 블러)
         undistorted = self.undistort_image(cv_image)
+        bev_color = self.warp_image(undistorted)
         blurred = cv2.GaussianBlur(undistorted, (5, 5), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
@@ -121,6 +124,11 @@ class LaneDetectorNode(Node):
         msg_lane = self.bridge.cv2_to_imgmsg(bev_lane, "mono8")
         msg_lane.header = msg.header
         self.publisher_bev_lane.publish(msg_lane)
+
+        # (A-1) 디버깅용 컬러 BEV
+        msg_bev_color = self.bridge.cv2_to_imgmsg(bev_color, "bgr8")
+        msg_bev_color.header = msg.header
+        self.publisher_bev_color.publish(msg_bev_color)
 
         # (B) 종료용 Red BEV
         msg_red = self.bridge.cv2_to_imgmsg(bev_red, "mono8")
