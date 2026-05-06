@@ -11,6 +11,7 @@ class BevViewerNode(Node):
         self.get_logger().info('BEV Viewer Node started.')
 
         self.bridge = CvBridge()
+        self.frame_count = 0
         self.subscription = self.create_subscription(
             Image, '/image_bev_binary', self.image_callback, 10
         )
@@ -21,6 +22,10 @@ class BevViewerNode(Node):
         except Exception as exc:
             self.get_logger().error(f'Failed to convert BEV image: {exc}')
             return
+
+        self.frame_count += 1
+        if self.frame_count == 1:
+            self.get_logger().info('Received first BEV frame.')
 
         cv2.imshow('BEV View', bev_image)
         cv2.waitKey(1)
@@ -39,7 +44,8 @@ def main(args=None):
         pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == '__main__':

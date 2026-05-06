@@ -14,3 +14,7 @@ __pycache__/
 .vscode/
 __pycache__/
 *.pyc
+
+.vscode/
+__pycache__/
+*.pyc

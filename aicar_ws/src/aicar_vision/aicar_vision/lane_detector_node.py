@@ -14,6 +14,7 @@ class LaneDetectorNode(Node):
         self.get_logger().info('Lane Detector Node (Dual Output: Yellow Lane + Red Finish) started.')
 
         self.bridge = CvBridge()
+        self.declare_parameter('image_topic', '/camera/image_raw')
         
         # --- 1. 파라미터 로드 (카메라 보정) ---
         package_share_directory = get_package_share_directory('aicar_vision')
@@ -65,7 +66,9 @@ class LaneDetectorNode(Node):
         self.dilate_kernel = np.ones((5, 5), np.uint8)
 
         # --- 4. ROS 설정 ---
-        self.subscription = self.create_subscription(Image, '/camera_node/image_raw', self.image_callback, 10)
+        image_topic = self.get_parameter('image_topic').get_parameter_value().string_value
+        self.subscription = self.create_subscription(Image, image_topic, self.image_callback, 10)
+        self.get_logger().info(f'Subscribing to image topic: {image_topic}')
         
         # 토픽 1: 주행용 차선 (노란색) -> PID 제어에 사용
         self.publisher_bev_lane = self.create_publisher(Image, '/image_bev_binary', 10)

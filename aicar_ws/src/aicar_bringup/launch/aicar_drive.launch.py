@@ -2,6 +2,8 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
@@ -24,10 +26,22 @@ def generate_launch_description():
         name='lane_detector_node'
     )
 
-    bev_view_node = Node(
-        package='aicar_vision',
-        executable='bev_viewer_node',
-        name='bev_view',
+    bev_view_node = ComposableNodeContainer(
+        name='bev_view_container',
+        namespace='',
+        package='rclcpp_components',
+        executable='component_container',
+        composable_node_descriptions=[
+            ComposableNode(
+                package='image_view',
+                plugin='image_view::ImageViewNode',
+                name='bev_image_view_node',
+                remappings=[
+                    ('image', '/image_bev_binary'),
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+        ],
         output='screen'
     )
 
