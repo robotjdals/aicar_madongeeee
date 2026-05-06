@@ -15,6 +15,8 @@ setup(
         
         (os.path.join('share', package_name, 'calibration_data'), 
          glob(os.path.join('calibration_data', '*.p'))),
+        (os.path.join('share', package_name, 'models'),
+         glob(os.path.join('models', '*.tflite'))),
     ],
     install_requires=['setuptools', 'numpy'], # numpy가 이미 포함되어 있음
     zip_safe=True,
@@ -27,6 +29,7 @@ setup(
         'console_scripts': [
             'lane_detector_node = aicar_vision.lane_detector_node:main',
             'fake_detector_node = aicar_vision.fake_detector_node:main',
+            'sign_detector_node = aicar_vision.sign_detector_node:main',
         ],
     },
 )
