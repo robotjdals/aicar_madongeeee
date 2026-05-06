@@ -28,6 +28,7 @@ setup(
     entry_points={
         'console_scripts': [
             'lane_detector_node = aicar_vision.lane_detector_node:main',
+            'bev_viewer_node = aicar_vision.bev_viewer_node:main',
             'fake_detector_node = aicar_vision.fake_detector_node:main',
             'sign_detector_node = aicar_vision.sign_detector_node:main',
         ],

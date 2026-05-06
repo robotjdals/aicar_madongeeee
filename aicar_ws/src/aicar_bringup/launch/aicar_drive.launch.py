@@ -25,10 +25,10 @@ def generate_launch_description():
     )
 
     bev_view_node = Node(
-        package='image_view',
-        executable='image_view',
+        package='aicar_vision',
+        executable='bev_viewer_node',
         name='bev_view',
-        arguments=['--ros-args', '--remap', 'image:=/image_bev_binary']
+        output='screen'
     )
 
     controller_node = Node(
