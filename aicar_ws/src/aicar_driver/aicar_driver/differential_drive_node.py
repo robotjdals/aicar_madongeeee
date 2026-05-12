@@ -51,8 +51,8 @@ class MotorControllerNode(Node):
         duty_r = np.clip(vr_ms * self.speed_gain, -100, 100)
 
         # 4. 모터 하드웨어 제어
-        self.set_motor(AIN1, AIN2, PWMA, duty_l)
-        self.set_motor(BIN1, BIN2, PWMB, duty_r)
+        self.set_motor(AIN1, AIN2, PWMA, duty_r)
+        self.set_motor(BIN1, BIN2, PWMB, duty_l)
 
     def set_motor(self, in1, in2, pwm_pin, duty):
         if duty >= 0:   # 전진
