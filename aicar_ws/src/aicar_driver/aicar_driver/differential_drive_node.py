@@ -34,8 +34,8 @@ class MotorControllerNode(Node):
 
     def cmd_vel_callback(self, msg):
         # 1. Twist 메시지에서 선속도(v), 각속도(w) 추출
-        linear_x = msg.linear.x   # m/s
-        angular_z = msg.angular.z # rad/s
+        linear_x = -msg.linear.x   # m/s
+        angular_z = -msg.angular.z # rad/s
 
         angular_z_gain = 1.85  # 필요에 따라 이 값을 조절하세요.
         angular_z_amplified = angular_z * angular_z_gain

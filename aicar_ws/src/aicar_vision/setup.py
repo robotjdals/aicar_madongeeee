@@ -12,8 +12,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        
-        (os.path.join('share', package_name, 'calibration_data'), 
+
+        (os.path.join('share', package_name, 'calibration_data'),
          glob(os.path.join('calibration_data', '*.p'))),
         (os.path.join('share', package_name, 'models'),
          glob(os.path.join('models', '*.tflite'))),

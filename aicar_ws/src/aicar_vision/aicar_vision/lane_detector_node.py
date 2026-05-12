@@ -52,9 +52,9 @@ class LaneDetectorNode(Node):
 
         # --- 3. 색상 임계값 정의 ---
 
-        # (A) 주행 차선용 (노란색)
-        self.lower_yellow = np.array([20, 40, 100])
-        self.upper_yellow = np.array([35, 255, 255])
+        # (A) 주행 차선용 (임시: 검은색)
+        self.lower_black = np.array([0, 0, 0])
+        self.upper_black = np.array([180, 255, 80])
 
         # (B) 종료선용 (빨간색) - HSV에서 Red는 0과 180 양쪽에 걸쳐 있음
         self.lower_red1 = np.array([0, 40, 100])
@@ -111,8 +111,8 @@ class LaneDetectorNode(Node):
         blurred = cv2.GaussianBlur(undistorted, (5, 5), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
-        # 2. [주행용] 노란색 차선 처리
-        mask_lane = self.process_color(hsv, self.lower_yellow, self.upper_yellow, is_red=False)
+        # 2. [주행용] 검은색 차선 처리
+        mask_lane = self.process_color(hsv, self.lower_black, self.upper_black, is_red=False)
         bev_lane = self.warp_image(mask_lane)
         
         # 3. [종료용] 빨간색 라인 처리
