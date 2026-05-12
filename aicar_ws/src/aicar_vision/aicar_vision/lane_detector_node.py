@@ -38,10 +38,10 @@ class LaneDetectorNode(Node):
         self.img_width = 640
         self.img_height = 480
         self.src_points = np.float32([
-            (0, 480), 
-            (170, 350), 
-            (470, 350), 
-            (640, 480)])
+            (4, 430),
+            (40, 388),
+            (600, 388),
+            (634, 430)])
         self.dst_points = np.float32([
             (int(self.img_width * 0.2), int(self.img_height)),
             (int(self.img_width * 0.2), 0),
