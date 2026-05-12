@@ -38,10 +38,10 @@ class LaneDetectorNode(Node):
         self.img_width = 640
         self.img_height = 480
         self.src_points = np.float32([
-            (4, 390),
-            (40, 388),
-            (600, 388),
-            (634, 390)])
+            (10, 440),
+            (20, 405),
+            (618, 405),
+            (628, 440)])
         self.dst_points = np.float32([
             (int(self.img_width * 0.2), int(self.img_height)),
             (int(self.img_width * 0.2), 0),
@@ -52,9 +52,9 @@ class LaneDetectorNode(Node):
 
         # --- 3. 색상 임계값 정의 ---
 
-        # (A) 주행 차선용 (임시: 검은색)
-        self.lower_black = np.array([0, 0, 0])
-        self.upper_black = np.array([180, 255, 80])
+        # (A) 주행 차선용 (yellow)
+        self.lower_black = np.array([20, 40, 100])
+        self.upper_black = np.array([35, 255, 255])
 
         # (B) 종료선용 (빨간색) - HSV에서 Red는 0과 180 양쪽에 걸쳐 있음
         self.lower_red1 = np.array([0, 40, 100])
