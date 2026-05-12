@@ -76,8 +76,9 @@ class PIDControllerNode(Node):
         # --- 구독 설정 ---
         self.subscription = self.create_subscription(
             Image, '/image_bev_binary', self.bev_callback, 10)
-        self.red_subscription = self.create_subscription(
-            Image, '/image_red_bev', self.red_bev_callback, 10)
+        # 빨간 종료선 정지 테스트를 잠시 비활성화함.
+        # self.red_subscription = self.create_subscription(
+        #     Image, '/image_red_bev', self.red_bev_callback, 10)
         self.sign_subscription = self.create_subscription(
             String, '/sign_detection', self.sign_callback, 10)
         self.status_subscription = self.create_subscription(
@@ -109,34 +110,30 @@ class PIDControllerNode(Node):
                 self.get_logger().info(">>> System Ready Signal Received! STARTING DRIVE.")
                 self.set_state(STATE_NORMAL)
 
-    def red_bev_callback(self, msg):
-        # 종료 로직은 NORMAL 상태에서만 작동
-        if self.drive_state != STATE_NORMAL: return 
-
-        try:
-            red_bev = self.bridge.imgmsg_to_cv2(msg, "mono8")
-            h, w = red_bev.shape
-        except: return
-
-        # --- 1. 검사 영역 정의 ---
-        h_start = int(h * 0.80)
-        
-        # 중앙 60%
-        w_start = int(w * 0.20)
-        w_end = int(w * 0.80)
-        
-        # 2. 검사할 영역(Detection Zone)을 하단 중앙 60%로 슬라이싱
-        detection_zone = red_bev[h_start:h, w_start:w_end]
-        
-        # 3. 해당 영역의 흰색 픽셀(빨간색 띠) 면적 밀도 계산
-        total_white_pixels = np.sum(detection_zone) / 255.0 
-        zone_area = detection_zone.size 
-        white_density = total_white_pixels / zone_area
-        
-        # 4. 임계값 (40%) 이상이면 종료선으로 간주하여 정지
-        if white_density > 0.40: 
-            self.get_logger().warn("🔴 FINISH LINE DETECTED! Stopping Robot.")
-            self.set_state(STATE_FINISHED)
+    # def red_bev_callback(self, msg):
+    #     # 종료 로직은 NORMAL 상태에서만 작동
+    #     if self.drive_state != STATE_NORMAL:
+    #         return
+    #
+    #     try:
+    #         red_bev = self.bridge.imgmsg_to_cv2(msg, "mono8")
+    #         h, w = red_bev.shape
+    #     except:
+    #         return
+    #
+    #     # 하단 중앙 영역의 빨간색 밀도를 보고 종료선을 판단
+    #     h_start = int(h * 0.80)
+    #     w_start = int(w * 0.20)
+    #     w_end = int(w * 0.80)
+    #     detection_zone = red_bev[h_start:h, w_start:w_end]
+    #
+    #     total_white_pixels = np.sum(detection_zone) / 255.0
+    #     zone_area = detection_zone.size
+    #     white_density = total_white_pixels / zone_area
+    #
+    #     if white_density > 0.40:
+    #         self.get_logger().warn("FINISH LINE DETECTED! Stopping Robot.")
+    #         self.set_state(STATE_FINISHED)
 
     def sign_callback(self, msg):
         new_sign = msg.data
