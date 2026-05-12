@@ -30,15 +30,15 @@ class PIDControllerNode(Node):
         self.bridge = CvBridge()
 
         # --- 1. 파라미터 ---
-        self.declare_parameter('vehicle_speed', 0.2)
+        self.declare_parameter('vehicle_speed', 0.3)
         self.declare_parameter('ym_per_pix', 0.01)
         self.declare_parameter('xm_per_pix', 0.005)
         self.declare_parameter('half_track_width_pixels', 250)
         self.declare_parameter('kp', 0.85)
         self.declare_parameter('ki', 0.0)
         self.declare_parameter('kd', 0.2)
-        self.declare_parameter('lookahead_row_offset', 20)
-        self.declare_parameter('cmd_delay', 0.0)
+        self.declare_parameter('lookahead_row_offset', 1)
+        self.declare_parameter('cmd_delay', 2.0)
 
         self.base_speed = self.get_parameter('vehicle_speed').get_parameter_value().double_value
         self.xm_per_pix = self.get_parameter('xm_per_pix').get_parameter_value().double_value
