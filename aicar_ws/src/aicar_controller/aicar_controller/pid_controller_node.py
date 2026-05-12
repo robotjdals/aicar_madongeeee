@@ -54,7 +54,7 @@ class PIDControllerNode(Node):
         self.prev_time = self.get_clock().now().nanoseconds / 1e9
 
         # --- 주행 상태 머신 변수 ---
-        self.drive_state = STATE_WAITING_FOR_SYSTEM # 초기 상태: 대기
+        self.drive_state = STATE_NORMAL # 라인 추종/PID 테스트용으로 즉시 주행 시작
         
         self.state_start_time = 0.0
         self.turn_direction = 0.0 
