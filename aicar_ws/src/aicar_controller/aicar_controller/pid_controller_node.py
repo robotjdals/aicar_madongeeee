@@ -64,25 +64,24 @@ def generate_launch_description():
         output='screen'
     )
 
-    # 카메라/BEV UI 확인용으로 제어기와 모터 노드는 잠시 비활성화.
-    # controller_node = Node(
-    #     package='aicar_controller',
-    #     executable='pid_controller_node',
-    #     name='pid_controller_node'
-    # )
-    #
-    # motor_driver_node = Node(
-    #     package='aicar_driver',
-    #     executable='differential_drive_node',
-    #     name='differential_drive_node',
-    #     output='screen'
-    # )
+    controller_node = Node(
+        package='aicar_controller',
+        executable='pid_controller_node',
+        name='pid_controller_node'
+    )
+
+    motor_driver_node = Node(
+        package='aicar_driver',
+        executable='differential_drive_node',
+        name='differential_drive_node',
+        output='screen'
+    )
 
     return LaunchDescription([
         camera_node_launch,
         lane_detector_node,
         bev_view_node,
         bev_color_view_node,
-        # controller_node,
-        # motor_driver_node,
+        controller_node,
+        motor_driver_node,
     ])
